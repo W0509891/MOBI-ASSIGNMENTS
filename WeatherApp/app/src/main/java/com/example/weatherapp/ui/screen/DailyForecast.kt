@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -48,7 +49,7 @@ fun DailyForecast(){
     val year = 2025
 
     // Loop to "simulate day changes
-    for (i in 0..4){
+    for (i in 0..6){
         dates.add(Date(month, day + i, year))
     }
 
@@ -57,19 +58,19 @@ fun DailyForecast(){
     Column(
         modifier = Modifier
             .fillMaxSize()
-//            .windowInsetsTopHeight(WindowInsets(top= 880.dp))
-            .background(color = Color(0xFF9378D3))
+            .background(color = Color(0xff1ededede))
         ,
-//        verticalArrangement = Arrangement.SpaceEvenly,
+//        verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
 
     ) {
-        Spacer(modifier = Modifier.height(25.dp))
 
         //Main content goes here
         for (date in dates){
             Forecast(date= date)
-            Spacer(modifier = Modifier.height(25.dp))
+            Spacer(
+                modifier = Modifier.height(1.dp)
+            )
 
         }
     }
@@ -182,8 +183,8 @@ fun Forecast(date:Date){
         modifier = Modifier
             .fillMaxWidth()
 //            .padding(vertical = 10.dp)
-            .background(color = Color(0xFFEC4B14))
-            .border(BorderStroke(1.dp, Color.Black))
+            .background(color = Color(0xFF3795FF))
+//            .border(BorderStroke(1.dp, Color.Black))
 
         ,
         horizontalAlignment = Alignment.CenterHorizontally
