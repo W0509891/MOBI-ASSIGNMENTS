@@ -3,14 +3,13 @@ package com.example.weatherapp.models
 
 // ========================Main Classes======================== //
 data class Weather (
-    val current: Current,
-    val forecast: List<Forecast>,
-
+    val current: Current?,
+    val forecast: List<Forecast>?
     )
 
 
 data class Current(
-    val weatherImage: String, //Ask - What should be data type
+    val weatherImage: WeatherImage, //Ask - What should be data type
     val condition: String,
     val temperature: Temperature,
     val precipitation: Precipitation,
@@ -20,8 +19,8 @@ data class Current(
 
 
 data class Forecast(
-    val date: String, //Ask - What should be data type
-    val weatherImage: String, //Ask - What should be data type
+    var date: String, //Ask - What should be data type
+    val weatherImage: WeatherImage, //Ask - What should be data type
     val temperature: Temperature,
     val condition: String,
     val precipitation: Precipitation,
@@ -32,6 +31,12 @@ data class Forecast(
 
 // ========================Helper Classes======================== //
 
+data class WeatherImage(
+    val weatherIcon: String = "",
+    val weatherIconRId: Int  = Int.MIN_VALUE,
+    val weatherBackground: String = "",
+    val weatherBackgroundRId: Int = Int.MIN_VALUE
+)
 data class Temperature(
     val actual: Int,
     val high: Int,
