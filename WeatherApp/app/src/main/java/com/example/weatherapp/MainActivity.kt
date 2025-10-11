@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -38,12 +40,15 @@ import com.example.weatherapp.ui.screen.DailyForecast
 import com.example.weatherapp.ui.theme.WeatherAppTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val mainViewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             WeatherAppTheme {
-                DisplayUI()
+                DisplayUI(mainViewModel)
             }
         }
     }
@@ -52,7 +57,10 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DisplayUI() {
+fun DisplayUI(mainViewModel: MainViewModel) {
+
+    val weather by mainViewModel.weather.collectAsState()
+
     val navController = rememberNavController()
 
     var selectedItem by remember { mutableIntStateOf(0) }
@@ -63,7 +71,7 @@ fun DisplayUI() {
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.inverseSurface
                 ),
-                title = { Text("Weather App") }
+                title = { Text("Halifax, NS") }
             )
         }, //End of topBar
 
@@ -79,7 +87,7 @@ fun DisplayUI() {
                     label = { Text("Current Weather") },
                     icon = {
                         Icon(
-                            painter = painterResource(R.drawable.cloud_bolt_svgrepo_com),
+                            painter = painterResource(R.drawable.cloud_clock),
                             modifier = Modifier.size(30.dp),
                             contentDescription = "Current Weather"
                         )}
@@ -96,7 +104,7 @@ fun DisplayUI() {
                     label = { Text("Forecast") },
                     icon = {
                         Icon(
-                            painter = painterResource(R.drawable.cloud_sun_alt_svgrepo_com),
+                            painter = painterResource(R.drawable.cloud_calender),
                             modifier = Modifier.size(30.dp),
                             contentDescription = "Forecast"
                         )}
@@ -121,11 +129,11 @@ fun DisplayUI() {
         ){
             // Displays Current Weather
             composable (route = "CurrentWeather"){
-                CurrentWeather()
+                CurrentWeather(weather?.current)
             }
 
             composable(route = "DailyForecast") {
-                DailyForecast()
+                DailyForecast(weather?.forecast)
             }
 
         }
