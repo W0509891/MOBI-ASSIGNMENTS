@@ -1,217 +1,96 @@
 package com.example.weatherapp.ui.screen
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.weatherapp.R
-import com.example.weatherapp.models.Weather
+import com.example.weatherapp.models.Forecast
 
-data class Date(var month: String, var day: Int, var year: Int){
+//Custom Date class to avoid repetition
+data class Date(var month: String, var day: Int, var year: Int) {
     override fun toString(): String {
         return "$day, $month $year"
     }
-
 }
 
-
 @Composable
-fun DailyForecast(){
-
-    //TODO: Initalize a date object for dynamic changes
-    val dates = arrayListOf<Date>()
-
-    val day = 9;
-    val month = "October"
-    val year = 2025
-
-    // Loop to "simulate day changes
-    for (i in 0..6){
-        dates.add(Date(month, day + i, year))
-    }
-
+fun DailyForecast(forecast: List<Forecast>?) {
 
     //Main view
     Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color(0xff1ededede))
-        ,
-//        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally
-
-    ) {
+            .background(color = Color(0xF2A9A9A9))
+    )
+    {
 
         //Main content goes here
-        for (date in dates){
-            Forecast(date= date)
+
+        //For each loop to reneder days of the week from forecast list
+        forecast?.forEach { item ->
+            Forecast(item)
             Spacer(
                 modifier = Modifier.height(1.dp)
             )
-
         }
     }
 }
 
-/*
 @Composable
-fun CurrentDay(){
-var myDate = Date("October", 9, 2025)
-
+fun Forecast(f: Forecast) {
     Column(
-        modifier = Modifier.background(Color(0xff3322ff))
-            .fillMaxWidth()
-        ,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        //Display date is string format
-        Text(myDate.toString())
-
-        //Image to visualize weather conditions for day
-        Image(
-            painter = painterResource(R.drawable.cloud_rain_alt_1_svgrepo_com),
-            modifier = Modifier.size(70.dp),
-            contentDescription = "Weather Status"
-        )
-
-        // Description for the weather
-        Text("10°C High 3°C Low")
-
-        //More insight on weather conditions
-        Text(
-            "Heavy rain. Chance of rain 76%. Amount 52.39. Maximum winds 41kph. Humidity 96%",
-            textAlign = TextAlign.Center
-            )
-
-
-    }
-}
-
-@Composable
-fun NextDay(){
-    var myDate = Date("October", 10, 2025)
-
-    Column(
-        modifier = Modifier.background(Color(0xff3322ff))
-            .fillMaxWidth()
-        ,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        //Display date is string format
-        Text(myDate.toString())
-
-        //Image to visualize weather conditions for day
-        Image(
-            painter = painterResource(R.drawable.cloud_rain_alt_1_svgrepo_com),
-            modifier = Modifier.size(70.dp),
-            contentDescription = "Weather Status"
-        )
-
-        // Description for the weather
-        Text("10°C High 3°C Low")
-
-        //More insight on weather conditions
-        Text(
-            "Heavy rain. Chance of rain 76%. Amount 52.39. Maximum winds 41kph. Humidity 96%",
-            textAlign = TextAlign.Center
-            )
-
-
-    }
-}
-
-@Composable
-fun Overmorrow(){
-    var myDate = Date("October", 11, 2025)
-
-    Column(
-        modifier = Modifier.background(Color(0xff3322ff))
-            .fillMaxWidth()
-        ,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        //Display date is string format
-        Text(myDate.toString())
-
-        //Image to visualize weather conditions for day
-        Image(
-            painter = painterResource(R.drawable.cloud_rain_alt_1_svgrepo_com),
-            modifier = Modifier.size(70.dp),
-            contentDescription = "Weather Status"
-        )
-
-        // Description for the weather
-        Text("10°C High 3°C Low")
-
-        //More insight on weather conditions
-        Text(
-            "Heavy rain. Chance of rain 76%. Amount 52.39. Maximum winds 41kph. Humidity 96%",
-            textAlign = TextAlign.Center
-            )
-
-    }
-}
-
-*/
-
-@Composable
-fun Forecast(date:Date){
-    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
-//            .padding(vertical = 10.dp)
-            .background(color = Color(0xFF3795FF))
-//            .border(BorderStroke(1.dp, Color.Black))
+            .background(color = Color(0xFFDCDCDC))
+            .padding(vertical = 10.dp)
+    )
+    {
 
-        ,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+        //todo: Add backgroundd image for foreast
+
         //Display date is string format
-        Text(date.toString())
+        Text(f.date)
 
         //Image to visualize weather conditions for day
         Image(
-            painter = painterResource(R.drawable.cloud_rain_alt_1_svgrepo_com),
+            painter = painterResource(f.weatherImage.weatherIconRId),
             modifier = Modifier.size(70.dp),
             contentDescription = "Weather Status"
         )
 
         // Description for the weather
-        Text("10°C High 3°C Low")
+        Text("${f.temperature.high}°C High ${f.temperature.low}°C Low")
 
         //More insight on weather conditions
-        Text(
-            "Heavy rain. Chance of rain 76%. Amount 52.39. Maximum winds 41kph. Humidity 96%",
-            textAlign = TextAlign.Center
-        )
-    }
-}
 
-@Preview
-@Composable
-fun DailyForecastPreview() {
-    DailyForecast()
+        //Logic for precipitation
+        if (f.precipitation.amount == 0) {
+            Text(
+                "${f.condition}. Maximum winds ${f.wind.speed}kph. Humidity ${f.humidity}%",
+                textAlign = TextAlign.Center
+            )
+        }
+        // Fall back if none
+        else {
+            Text(
+                "${f.precipitation.type}. Chance of rain is ${f.precipitation.probability}%. Amount ${f.precipitation.amount}mm. Maximum winds ${f.wind.speed}kph. Humidity ${f.humidity}%",
+                textAlign = TextAlign.Center
+            )
+        }
+    }
 }
