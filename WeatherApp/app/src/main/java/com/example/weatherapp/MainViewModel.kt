@@ -1,99 +1,78 @@
 package com.example.weatherapp
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.weatherapp.models.Condition
 import com.example.weatherapp.models.Current
 import com.example.weatherapp.models.Forecast
-import com.example.weatherapp.models.Precipitation
-import com.example.weatherapp.models.Temperature
+
+
 import com.example.weatherapp.models.Weather
-import com.example.weatherapp.models.WeatherImage
-import com.example.weatherapp.models.Wind
+
 import com.example.weatherapp.ui.screen.Date
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+
+import com.example.weatherapp.services.WeatherService
+import kotlinx.coroutines.launch
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainViewModel : ViewModel() {
 
     private val _weather = MutableStateFlow<Weather?>(null)
     val weather = _weather.asStateFlow()
 
+    val retrofit: Retrofit = Retrofit.Builder()
+        .baseUrl("https://api.weatherapi.com/v1/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    val weatherService: WeatherService  =retrofit.create(WeatherService::class.java)
+
     init {
 
         val today = Date("October", 10, 2025); //initialize date
 
+        viewModelScope.launch {
+
+
         //initialize weather class
         var weather = Weather(
             //Current weather
-            Current(
-                condition = "Overcast",
-                wind = Wind("SW", 99),
-                temperature = Temperature(6, 12, 4),
-                weatherImage = WeatherImage(
-                    weatherIconRId = R.drawable.cloud_overcast,
-                    weatherBackgroundRId = R.drawable.cloud_overcast_bg
-                ),
-                precipitation = Precipitation("", 33, 0),
-            ),
+           current = weatherService.getCurrent(),
 
             //List of forecasts
             forecast = listOf<Forecast>(
                 Forecast(
                     date = "",
-                    condition = "Sunny",
-                    wind = Wind("NE", 15),
-                    temperature = Temperature(10, 18, 7),
-                    weatherImage = WeatherImage(
-                        weatherIconRId = R.drawable.cloud_sun_alt
-                    ),
-                    precipitation = Precipitation("None", 0, 0),
+                    condition = Condition ("Sunny", ""),
+                    windSpeed = 15.0,
+                    tempLow = 10.0,
+                    tempHigh = 8.0,
+                    preciAmount = 0.0,
+                    preciChance = 0,
                     humidity = 45.0
                 ),
                 Forecast(
                     date = "",
-                    condition = "Partly Cloudy",
-                    wind = Wind("E", 22),
-                    temperature = Temperature(8, 16, 5),
-                    weatherImage = WeatherImage(
-                        weatherIconRId = R.drawable.cloud_sun_alt
-                    ),
-                    precipitation = Precipitation("Light Rain", 10, 5),
-                    humidity = 62.0
-                ),
-                Forecast(
-                    date = "",
-                    condition = "Overcast",
-                    wind = Wind("SW", 30),
-                    temperature = Temperature(6, 12, 4),
-                    weatherImage = WeatherImage(
-                        "overcast.png",
-                        R.drawable.cloud_sun_alt
-                    ),
-                    precipitation = Precipitation("Drizzle", 40, 12),
+                    condition = Condition ("Partly Cloudy", ""),
+                    windSpeed = 22.0,
+                    tempLow = 8.0,
+                    tempHigh = 5.0,
+                    preciAmount = 40.0,
+                    preciChance = 12,
                     humidity = 87.0
                 ),
                 Forecast(
                     date = "",
-                    condition = "Rain",
-                    wind = Wind("W", 40),
-                    temperature = Temperature(5, 10, 3),
-                    weatherImage = WeatherImage(
-                        "./drawable/cloud_rain_alt_1.xml",
-                        R.drawable.cloud_rain_alt_1
-                    ),
-                    precipitation = Precipitation("Moderate Rain", 80, 56),
-                    humidity = 92.0
-                ),
-                Forecast(
-                    date = "",
-                    condition = "Windy",
-                    wind = Wind("NW", 55),
-                    temperature = Temperature(7, 14, 5),
-                    weatherImage = WeatherImage(
-                        "windy.png",
-                        R.drawable.cloud_sun_alt
-                    ),
-                    precipitation = Precipitation("None", 0, 0),
-                    humidity = 50.0
+                    condition = Condition ("Overcast", ""),
+                    windSpeed =  30.0,
+                    tempLow = 6.0,
+                    tempHigh = 4.0,
+                    preciAmount = 40.0,
+                    preciChance = 12,
+                    humidity = 87.0
                 )
             )
         )
@@ -101,13 +80,17 @@ class MainViewModel : ViewModel() {
         //sets date for each forecast
         weather.forecast?.forEach({
             forecast ->
-                forecast?.date = Date(
+                forecast.date = Date(
                     today.month,
                     (today.day + weather.forecast.indexOf(forecast)),
                     today.year).toString()
+
+//                forecast.weatherImage.weatherBackgroundRId = R.drawable.drop
+
             })
 
         //assigns weather class to mutable state
         _weather.value = weather
     }
+}
 }

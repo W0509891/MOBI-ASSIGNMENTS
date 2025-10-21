@@ -133,7 +133,7 @@ fun DisplayUI(mainViewModel: MainViewModel) {
             }
 
             composable(route = "DailyForecast") {
-                DailyForecast(weather?.forecast)
+                DailyForecast(weather?.forecast!!)
             }
 
         }

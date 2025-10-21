@@ -2,6 +2,7 @@ package com.example.weatherapp.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.example.weatherapp.models.Forecast
 
 //Custom Date class to avoid repetition
@@ -27,7 +29,7 @@ data class Date(var month: String, var day: Int, var year: Int) {
 }
 
 @Composable
-fun DailyForecast(forecast: List<Forecast>?) {
+fun DailyForecast(forecast: List<Forecast>) {
 
     //Main view
     Column(
@@ -41,8 +43,16 @@ fun DailyForecast(forecast: List<Forecast>?) {
         //Main content goes here
 
         //For each loop to reneder days of the week from forecast list
-        forecast?.forEach { item ->
-            Forecast(item)
+        forecast.forEach { item ->
+            Box(
+                contentAlignment = Alignment.Center
+            ){
+//                Image(
+//                    painter = painterResource(item.weatherImage.weatherBackgroundRId),
+//                    contentDescription = ""
+//                )
+                Forecast(item)
+            }
             Spacer(
                 modifier = Modifier.height(1.dp)
             )
@@ -56,7 +66,7 @@ fun Forecast(f: Forecast) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = Color(0xFFDCDCDC))
+//            .background(color = Color(0xFFDCDCDC))
             .padding(vertical = 10.dp)
     )
     {
@@ -68,27 +78,27 @@ fun Forecast(f: Forecast) {
 
         //Image to visualize weather conditions for day
         Image(
-            painter = painterResource(f.weatherImage.weatherIconRId),
+            painter = rememberAsyncImagePainter(f.condition.icon),
             modifier = Modifier.size(70.dp),
             contentDescription = "Weather Status"
         )
 
         // Description for the weather
-        Text("${f.temperature.high}°C High ${f.temperature.low}°C Low")
+        Text("${f.tempHigh}°C High ${f.tempLow}°C Low")
 
         //More insight on weather conditions
 
         //Logic for precipitation
-        if (f.precipitation.amount == 0) {
+        if (f.preciAmount == 0.0) {
             Text(
-                "${f.condition}. Maximum winds ${f.wind.speed}kph. Humidity ${f.humidity}%",
+                "${f.condition.text}. Maximum winds ${f.windSpeed}kph. Humidity ${f.humidity}%",
                 textAlign = TextAlign.Center
             )
         }
         // Fall back if none
         else {
             Text(
-                "${f.precipitation.type}. Chance of rain is ${f.precipitation.probability}%. Amount ${f.precipitation.amount}mm. Maximum winds ${f.wind.speed}kph. Humidity ${f.humidity}%",
+                "${f.condition.text}. Chance of rain is ${f.preciChance}%. Amount ${f.preciAmount}mm. Maximum winds ${f.windSpeed}kph. Humidity ${f.humidity}%",
                 textAlign = TextAlign.Center
             )
         }

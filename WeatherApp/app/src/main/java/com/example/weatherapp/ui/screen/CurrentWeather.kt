@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.example.weatherapp.models.Current
 
 @Composable
@@ -31,10 +32,10 @@ fun CurrentWeather(current: Current?) {
         Box(
             contentAlignment = Alignment.Center
         ) {
-            Image(
-                painter = painterResource(current?.weatherImage!!.weatherBackgroundRId),
-                contentDescription = ""
-            )
+//            Image(
+//                painter = painterResource(current.weatherImage!!.weatherBackgroundRId),
+//                contentDescription = ""
+//            )
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -57,28 +58,31 @@ fun WeatherCondition(cw: Current?) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Image changes depending on the weather
+        if (cw != null) {
         Image(
             modifier = Modifier.size(150.dp), //Todo: Edit transparent space around image
-            painter = painterResource(cw?.weatherImage!!.weatherIconRId),
+            painter = rememberAsyncImagePainter(cw?.condition?.icon),
             contentDescription = "Weather Condition"
         )
-        Text(text = cw.condition, fontSize = 25.sp)  // Weather Condition
+            Text(text = cw?.condition?.text.toString(), fontSize = 25.sp)
+            // Weather Condition
 
-        Text(
-            "${cw.temperature.actual}°C", // Actual temperature
-            fontSize = 35.sp,
-            fontWeight = FontWeight.Bold
-        )
+            Text(
+                "${cw?.temp}°C", // Actual temperature
+                fontSize = 35.sp,
+                fontWeight = FontWeight.Bold
+            )
 
-        Text(
-            "Feels like " + "${cw.temperature.actual}°C", // wind temperature
-            fontSize = 16.sp
-        )
+            Text(
+                "Feels like " + "${cw?.feels}°C", // wind temperature
+                fontSize = 16.sp
+            )
 
-        Text(
-            "Wind " + "${cw.wind.direction} ${cw.wind.speed} kph", // wind speeds
-            fontSize = 16.sp
-        )
+            Text(
+                "Wind " + "${cw?.windDirection} ${cw?.windSpeed} kph", // wind speeds
+                fontSize = 16.sp
+            )
+        }
     }
 }
 
