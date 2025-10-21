@@ -61,14 +61,14 @@ fun WeatherCondition(cw: Current?) {
         if (cw != null) {
         Image(
             modifier = Modifier.size(150.dp), //Todo: Edit transparent space around image
-            painter = rememberAsyncImagePainter(cw?.condition?.icon),
+            painter = rememberAsyncImagePainter("https:${cw.condition.icon}"),
             contentDescription = "Weather Condition"
         )
-            Text(text = cw?.condition?.text.toString(), fontSize = 25.sp)
+            Text(text = cw.condition.text, fontSize = 25.sp)
             // Weather Condition
 
             Text(
-                "${cw?.temp}°C", // Actual temperature
+                "${cw.temp}°C", // Actual temperature
                 fontSize = 35.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -79,7 +79,7 @@ fun WeatherCondition(cw: Current?) {
             )
 
             Text(
-                "Wind " + "${cw?.windDirection} ${cw?.windSpeed} kph", // wind speeds
+                "Wind " + "${cw?.windDirection} at ${cw?.windSpeed} kph", // wind speeds
                 fontSize = 16.sp
             )
         }
