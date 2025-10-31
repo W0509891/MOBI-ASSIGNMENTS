@@ -4,11 +4,19 @@ import com.google.gson.annotations.SerializedName
 
 // ========================Main Classes======================== //
 data class Weather(
+    val location: Location,
     val current: Current,
     val forecast: Forecastday,
 )
 
 
+data class Location(
+    val name: String,
+    val region: String,
+    val country: String,
+    val lat: Double,
+    val lon: Double
+)
 data class Current(
     val condition: Condition,
     @SerializedName("temp_c") val temp: Double,
@@ -21,7 +29,7 @@ data class Current(
 
 data class Forecast(
     var date: String, //Ask - What should be data type
-    val day: Day
+    val day: Day,
 )
 
 // ========================Helper Classes======================== //
@@ -44,5 +52,5 @@ data class Day(
 
 
 data class Forecastday(
-    @SerializedName("forecastday") val forecast: List<Forecast>
+    @SerializedName("forecastday") val forecast: List<Forecast>,
 )
