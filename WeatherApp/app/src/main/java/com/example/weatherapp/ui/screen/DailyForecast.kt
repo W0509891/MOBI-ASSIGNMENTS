@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,12 +37,14 @@ import java.time.format.DateTimeFormatter
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DailyForecast(forecast: List<Forecast>) {
+    val scrollState = rememberScrollState()
 
     //Main view
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .background(color = Color(0xFFFAF9F9))
     )
     {
@@ -59,7 +63,7 @@ fun DailyForecast(forecast: List<Forecast>) {
                 Forecast(item)
             }
             Spacer(
-                modifier = Modifier.height(1.dp)
+                modifier = Modifier.height(2.dp)
             )
         }
     }
@@ -76,7 +80,7 @@ fun Forecast(f: Forecast?) {
             .clip(shape = Shapes().extraLarge)
             .fillMaxWidth()
             .background(color = Color(0xFFDCDCDC))
-//            .padding(vertical = 10.dp)
+            .padding(vertical = 10.dp)
             .border(
                 width = 1.dp,
                 shape = Shapes().extraLarge,
@@ -121,7 +125,7 @@ fun Forecast(f: Forecast?) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 fun formatDate(date: String, format: String): String {
 
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
