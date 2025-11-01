@@ -1,55 +1,56 @@
 package com.example.weatherapp.models
 
+import com.google.gson.annotations.SerializedName
 
 // ========================Main Classes======================== //
-data class Weather (
-    val current: Current?,
-    val forecast: List<Forecast>?
-    )
+data class Weather(
+    val location: Location,
+    val current: Current,
+    val forecast: Forecastday,
+)
 
 
+data class Location(
+    val name: String,
+    val region: String,
+    val country: String,
+    val lat: Double,
+    val lon: Double
+)
 data class Current(
-    val weatherImage: WeatherImage, //Ask - What should be data type
-    val condition: String,
-    val temperature: Temperature,
-    val precipitation: Precipitation,
-    val wind: Wind
-
+    val condition: Condition,
+    @SerializedName("temp_c") val temp: Double,
+    @SerializedName("wind_dir") val windDirection: String,
+    @SerializedName("wind_kph") val windSpeed: Double,
+    @SerializedName("windchill_c") val windTemp: Double,
+    @SerializedName("feelslike_c") val feels: Double,
 )
 
 
 data class Forecast(
     var date: String, //Ask - What should be data type
-    val weatherImage: WeatherImage, //Ask - What should be data type
-    val temperature: Temperature,
-    val condition: String,
-    val precipitation: Precipitation,
-    val wind: Wind,
-    val humidity: Double
-
+    val day: Day,
 )
 
 // ========================Helper Classes======================== //
 
-data class WeatherImage(
-    val weatherIcon: String = "",
-    val weatherIconRId: Int  = Int.MIN_VALUE,
-    val weatherBackground: String = "",
-    val weatherBackgroundRId: Int = Int.MIN_VALUE
-)
-data class Temperature(
-    val actual: Int,
-    val high: Int,
-    val low: Int
+
+data class Condition(
+    val text: String,
+    val icon: String,
 )
 
-data class Precipitation(
-    val type: String,
-    val amount: Int,
-    val probability: Int
+data class Day(
+    val condition: Condition,
+    @SerializedName("maxtemp_c") val tempHigh: Double,
+    @SerializedName("mintemp_c") val tempLow: Double,
+    @SerializedName("daily_chance_of_rain") val preciChance: Int,
+    @SerializedName("totalprecip_mm") val preciAmount: Double,
+    @SerializedName("maxwind_kph") val windSpeed: Double,
+    @SerializedName("avghumidity") val humidity: Double,
 )
 
-data class Wind(
-    val direction: String,
-    val speed: Int
+
+data class Forecastday(
+    @SerializedName("forecastday") val forecast: List<Forecast>,
 )
