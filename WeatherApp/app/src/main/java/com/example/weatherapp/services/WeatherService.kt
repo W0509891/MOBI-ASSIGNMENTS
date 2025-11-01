@@ -12,6 +12,8 @@ interface WeatherService {
     @GET("current.json?key=88585df785c74f2a902134735251610&q=Halifax")
     suspend fun getCurrent(): Current
 
-    @GET("forecast.json?key=88585df785c74f2a902134735251610&q=Halifax&days=7&aqi=no&alerts=no")
-    suspend fun getWeather(): Weather
+    @GET("forecast.json?key=88585df785c74f2a902134735251610&days=14&aqi=no&alerts=no")
+    suspend fun getWeather(
+        @Query("q") q: String,
+    ): Weather
 }
