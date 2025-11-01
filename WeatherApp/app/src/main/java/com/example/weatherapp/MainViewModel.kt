@@ -1,5 +1,6 @@
 package com.example.weatherapp
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
@@ -28,24 +29,20 @@ class MainViewModel : ViewModel() {
 
     val weatherService: WeatherService  =retrofit.create(WeatherService::class.java)
 
-    init {
+    fun fetchWeatherForLocation(location: String) {
+        // Don't fetch if the location is empty
+        if (location.isBlank()) return
 
         viewModelScope.launch {
-
-
-        //initialize weather class
-        var weather = weatherService.getWeather()
-
-
-        //sets date for each forecast
-   /*     weather.forecast?.forEach({
-            forecast -> forecast.weatherImage.weatherBackgroundRId = R.drawable.drop
-
-            })*/
-
-        //assigns weather class to mutable state
-        _weather.value = weather
+            try {
+                // Initialize weather class
+                val weatherData = weatherService.getWeather(location)
+                // Assigns weather class to mutable state
+                _weather.value = weatherData
+            } catch (e: Exception) {
+                Log.i("TESTING", "Error fetching weather", e)
+            }
+        }
     }
-}
 }
 
